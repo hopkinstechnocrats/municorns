@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -25,6 +26,11 @@ public class DriveSubsystem extends SubsystemBase {
     leftFollower = new WPI_TalonFX(Constants.leftFollowerCANID);
     rightMaster = new WPI_TalonFX(Constants.rightMasterCANID);
     rightFollower = new WPI_TalonFX(Constants.rightFollowerCANID);
+    leftMaster.setNeutralMode(NeutralMode.Brake);
+    rightMaster.setNeutralMode(NeutralMode.Brake);
+    leftFollower.setNeutralMode(NeutralMode.Brake);
+    rightFollower.setNeutralMode(NeutralMode.Brake);
+
     drive = new DifferentialDrive(
       leftMaster,
       rightMaster
@@ -35,6 +41,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void drive(double left, double right) {
     drive.tankDrive(left, right);
+    System.out.println("left: "+ left+ ", right: "+ right);
   }
 
   @Override
