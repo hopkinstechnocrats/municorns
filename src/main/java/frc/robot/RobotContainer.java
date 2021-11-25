@@ -7,8 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HighShelfSubsystem;
+import frc.robot.subsystems.MediumShelfSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.DriveToWall;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,19 +24,24 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final HighShelfSubsystem highShelfSubsystem = new HighShelfSubsystem();
+  private final MediumShelfSubsystem mediumShelfSubsystem = new MediumShelfSubsystem();
+
   private final XboxController driveController = new XboxController(Constants.XboxControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    // driveSubsystem.setDefaultCommand(
-    //         new RunCommand(
-    //                 () -> {
-    //                   driveSubsystem.drive(driveController.getY(GenericHID.Hand.kLeft), driveController.getY(GenericHID.Hand.kRight));
-    //                 }
-    //         , driveSubsystem)
-    // );
+    driveSubsystem.setDefaultCommand(
+            new RunCommand(
+                    () -> {
+                      driveSubsystem.drive(driveController.getY(GenericHID.Hand.kLeft), driveController.getY(GenericHID.Hand.kRight));
+                    }
+            , driveSubsystem)
+    );
+    highShelfSubsystem.setDefaultCommand(new RunCommand(() -> highShelfSubsystem.spin(0), highShelfSubsystem));
+  
   }
 
   /**
@@ -40,7 +50,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    JoystickButton bButton = new JoystickButton(driveController, 0);
+    bButton.whileHeld(new RunCommand(() -> {mediumShelfSubsystem.spin(0.6);}, mediumShelfSubsystem));
+  }
 
   public DriveSubsystem getDriveSubsystem() {
     return driveSubsystem;
@@ -54,6 +67,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return new SequentialCommandGroup(
+      new DriveToWall(driveSubsystem),
+      new RunCommand(
+        () -> {
+          highShelfSubsystem.spin(-0.4);
+        }
+        , highShelfSubsystem).withTimeout(1)
+    );
   }
 }

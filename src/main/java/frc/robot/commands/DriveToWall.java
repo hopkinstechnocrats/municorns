@@ -2,14 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.*;
 
 public class DriveToWall extends CommandBase {
-  /** Creates a new DriveToWall. */
-  public DriveToWall() {
+  private DriveSubsystem subsystem;
+
+/** Creates a new DriveToWall. */
+  public DriveToWall(DriveSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(subsystem);
+    this.subsystem = subsystem;
   }
 
   // Called when the command is initially scheduled.
@@ -18,7 +23,9 @@ public class DriveToWall extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    subsystem.drive(-0.4, -0.4);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -27,6 +34,6 @@ public class DriveToWall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return subsystem.limitSwitch.get();
   }
 }

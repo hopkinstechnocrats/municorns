@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -20,6 +21,8 @@ public class DriveSubsystem extends SubsystemBase {
   WPI_TalonFX rightMaster;
   WPI_TalonFX rightFollower;
   DifferentialDrive drive;
+  public DigitalInput limitSwitch;
+  
 
   public DriveSubsystem() {
     leftMaster = new WPI_TalonFX(Constants.leftMasterCANID);
@@ -37,6 +40,9 @@ public class DriveSubsystem extends SubsystemBase {
     );
     leftFollower.follow(leftMaster);
     rightFollower.follow(rightMaster);
+
+    limitSwitch = new DigitalInput(Constants.limitSwitchPort);
+    
   }
 
   public void drive(double left, double right) {
@@ -47,6 +53,10 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(limitSwitch.get());
+    SmartDashboard.putBoolean("Limit Switch State", limitSwitch.get());
+
+    
   }
 
   @Override

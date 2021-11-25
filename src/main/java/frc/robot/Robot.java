@@ -21,9 +21,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private DigitalInput limitSwitch;
-
-  private boolean limitSwitchWasHit;
+  
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -34,8 +32,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    limitSwitch = new DigitalInput(Constants.limitSwitchPort);
-    limitSwitchWasHit = false;
+  
 
   }
 
@@ -54,12 +51,8 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    System.out.println(limitSwitch.get());
-    SmartDashboard.putBoolean("Limit Switch State", limitSwitch.get());
-
-    if (limitSwitch.get()) {
-      limitSwitchWasHit = true;
-    }
+    
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -84,14 +77,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     boolean continueToDrive = true; // revert to: !limitSwitchWasHit;
-    
-    if (continueToDrive) {
-      m_robotContainer.getDriveSubsystem().drive(-0.55, -0.55);
-    }
-
-    else {
-      m_robotContainer.getDriveSubsystem().drive(0, 0);
-    }
     
   }
 
