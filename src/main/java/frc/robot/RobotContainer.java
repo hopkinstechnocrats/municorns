@@ -4,14 +4,15 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.HighShelfSubsystem;
-import frc.robot.subsystems.MediumShelfSubsystem;
+import frc.robot.subsystems.FourBarSubsystem;
+import frc.robot.subsystems.ConveyorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveToWall;
 
@@ -24,8 +25,8 @@ import frc.robot.commands.DriveToWall;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final HighShelfSubsystem highShelfSubsystem = new HighShelfSubsystem();
-  private final MediumShelfSubsystem mediumShelfSubsystem = new MediumShelfSubsystem();
+  private final FourBarSubsystem fourBarSubsystem = new FourBarSubsystem();
+  private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
 
   private final XboxController driveController = new XboxController(Constants.XboxControllerPort);
 
@@ -40,8 +41,9 @@ public class RobotContainer {
                     }
             , driveSubsystem)
     );
-    highShelfSubsystem.setDefaultCommand(new RunCommand(() -> highShelfSubsystem.spin(0), highShelfSubsystem));
-  
+    conveyorSubsystem.setDefaultCommand(new RunCommand(() -> conveyorSubsystem.spin(0), conveyorSubsystem));
+    fourBarSubsystem.setDefaultCommand(new RunCommand(() -> fourBarSubsystem.dontSpin(), fourBarSubsystem));
+
   }
 
   /**
@@ -52,7 +54,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     JoystickButton bButton = new JoystickButton(driveController, 0);
-    bButton.whileHeld(new RunCommand(() -> {mediumShelfSubsystem.spin(0.6);}, mediumShelfSubsystem));
+    bButton.whileHeld(new RunCommand(() -> {conveyorSubsystem.spin(0.6);}, conveyorSubsystem));
+    JoystickButton leftBumper = new JoystickButton(driveController, 5);
+    JoystickButton rightBumper = new JoystickButton(driveController, 6);
+    leftBumper.whenPressed(new RunCommand(() -> {fourBarSubsystem.lower();}, fourBarSubsystem));
+    rightBumper.whenPressed(new RunCommand(() -> {fourBarSubsystem.raise();}, fourBarSubsystem));
   }
 
   public DriveSubsystem getDriveSubsystem() {
@@ -71,9 +77,9 @@ public class RobotContainer {
       new DriveToWall(driveSubsystem),
       new RunCommand(
         () -> {
-          highShelfSubsystem.spin(-0.4);
+          conveyorSubsystem.spin(-0.4);
         }
-        , highShelfSubsystem).withTimeout(1)
+        , conveyorSubsystem).withTimeout(1)
     );
   }
 }

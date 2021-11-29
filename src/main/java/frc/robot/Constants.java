@@ -19,7 +19,9 @@ public final class Constants {
     public static final int leftFollowerCANID = 6;
     public static final int XboxControllerPort = 0;
     public static final int limitSwitchPort = 0;
-    public static final int highShelfMotorPort = 3;
-    public static final int mediumShelfMotorPort = 4;
+    public static final int fourBarMotorPort = 3;
+    public static final int conveyorMotorPort = 4;
+    public static final int encoderPort = 12;
+    public static final double fourBarSpeed = .2;
 
 }

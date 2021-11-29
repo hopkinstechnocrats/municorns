@@ -10,12 +10,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class MediumShelfSubsystem extends SubsystemBase {
+public class ConveyorSubsystem extends SubsystemBase {
   /** Creates a new HighShelfSubsystem. */
   WPI_TalonSRX motor;
 
-  public MediumShelfSubsystem() {
-    motor = new WPI_TalonSRX(Constants.mediumShelfMotorPort);
+  public ConveyorSubsystem() {
+    motor = new WPI_TalonSRX(Constants.conveyorMotorPort);
     motor.setNeutralMode(NeutralMode.Brake);
   }
 
