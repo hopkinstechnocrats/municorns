@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -14,7 +13,9 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FourBarSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.DriveToWall;
+import frc.robot.commands.RotateTo;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,8 +58,10 @@ public class RobotContainer {
     bButton.whileHeld(new RunCommand(() -> {conveyorSubsystem.spin(0.6);}, conveyorSubsystem));
     JoystickButton leftBumper = new JoystickButton(driveController, 5);
     JoystickButton rightBumper = new JoystickButton(driveController, 6);
-    leftBumper.whenPressed(new RunCommand(() -> {fourBarSubsystem.lower();}, fourBarSubsystem));
-    rightBumper.whenPressed(new RunCommand(() -> {fourBarSubsystem.raise();}, fourBarSubsystem));
+    leftBumper.whenPressed(new RotateTo(fourBarSubsystem, -1*Constants.fourBarSpeed, 0));
+    rightBumper.whenPressed(new RotateTo(fourBarSubsystem, Constants.fourBarSpeed, 3600));
+    JoystickButton back = new JoystickButton(driveController, 7);
+    back.whenPressed(new InstantCommand(fourBarSubsystem::resetEncoder, fourBarSubsystem));
   }
 
   public DriveSubsystem getDriveSubsystem() {
@@ -73,13 +76,17 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
+    
     return new SequentialCommandGroup(
+      /*
       new DriveToWall(driveSubsystem),
       new RunCommand(
         () -> {
           conveyorSubsystem.spin(-0.4);
         }
         , conveyorSubsystem).withTimeout(1)
+        */
     );
+    
   }
 }
