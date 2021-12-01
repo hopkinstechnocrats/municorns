@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,6 +17,13 @@ public class FourBarSubsystem extends SubsystemBase {
   /** Creates a new fourBarSubsystem. */
   WPI_TalonSRX motor;
   double offSet;
+  private double stopPos;
+
+  private final PIDController locPIDController =
+  new PIDController(Constants.fourBarPid, Constants.fourBarpId, Constants.fourBarpiD);
+
+  final double rotateSpeed = 
+  locPIDController.calculate(getEncoderPosition(), stopPos);
 
   public FourBarSubsystem() {
     motor = new WPI_TalonSRX(Constants.fourBarMotorPort);
@@ -31,11 +39,10 @@ public class FourBarSubsystem extends SubsystemBase {
   }
 
 
-  public void spin(double speed) {
-    motor.set(speed);
+  public void spin(double stopPos) {
+    this.stopPos = stopPos;
+    motor.set(rotateSpeed);
   }
-
-  
 
   public void dontSpin() {
     motor.set(0);
