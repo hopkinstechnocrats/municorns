@@ -23,8 +23,8 @@ public final class Constants {
     public static final int conveyorMotorPort = 0;
     public static final int encoderPort = 12;
     public static final double fourBarSpeed = .4;
-    public static final double fourBarPid = 0;
-    public static final double fourBarpId = 0;
-    public static final double fourBarpiD = 0;
+    public static final double fourBarKP = 0;
+    public static final double fourBarKI = 0;
+    public static final double fourBarKD = 0;
 
 }
