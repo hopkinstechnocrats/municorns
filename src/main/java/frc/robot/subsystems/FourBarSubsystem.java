@@ -23,6 +23,9 @@ public class FourBarSubsystem extends SubsystemBase {
   public FourBarSubsystem() {
     motor = new WPI_TalonSRX(Constants.fourBarMotorPort);
     motor.setNeutralMode(NeutralMode.Brake);
+    SmartDashboard.putNumber("kP Input", Constants.fourBarKP);
+    SmartDashboard.putNumber("kI Input", Constants.fourBarKI);
+    SmartDashboard.putNumber("kD Input", Constants.fourBarKD);
   }
 
   public void resetEncoder() {
@@ -37,7 +40,9 @@ public class FourBarSubsystem extends SubsystemBase {
   public void spin(double stopPos) {
     final double rotateSpeed = 
       locPIDController.calculate(getEncoderPosition(), stopPos);
-    motor.set(rotateSpeed);
+    
+    motor.setVoltage(Math.max(Math.min(rotateSpeed, 6), -3));
+    SmartDashboard.putNumber("rotateSpeed", rotateSpeed);
   }
 
   public void dontSpin() {
@@ -48,5 +53,16 @@ public class FourBarSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("FourBarEncoderPosition", getEncoderPosition());
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("kP", Constants.fourBarKP);
+    SmartDashboard.putNumber("kI", Constants.fourBarKI);
+    SmartDashboard.putNumber("kD", Constants.fourBarKD);
+
+    Constants.fourBarKP = SmartDashboard.getNumber("kP Input", 0);
+    Constants.fourBarKI = SmartDashboard.getNumber("kI Input", 0);
+    Constants.fourBarKD = SmartDashboard.getNumber("kD Input", 0);
+
+    locPIDController.setP(Constants.fourBarKP);
+    locPIDController.setI(Constants.fourBarKI);
+    locPIDController.setD(Constants.fourBarKD);
   }
 }

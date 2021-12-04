@@ -38,7 +38,7 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(
             new RunCommand(
                     () -> {
-                      driveSubsystem.drive(driveController.getY(GenericHID.Hand.kLeft), driveController.getY(GenericHID.Hand.kRight));
+                      driveSubsystem.drive(-0.45*driveController.getY(GenericHID.Hand.kLeft), -0.45*driveController.getY(GenericHID.Hand.kRight));
                     }
             , driveSubsystem)
     );
@@ -54,12 +54,16 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    JoystickButton bButton = new JoystickButton(driveController, 0);
-    bButton.whileHeld(new RunCommand(() -> {conveyorSubsystem.spin(0.6);}, conveyorSubsystem));
+    JoystickButton bButton = new JoystickButton(driveController, 1);
+    JoystickButton aButton = new JoystickButton(driveController, 2);
+
+    bButton.whileHeld(new RunCommand(() -> {conveyorSubsystem.spin(0.6); System.out.println("EJECTING");}, conveyorSubsystem));
+    aButton.whileHeld(new RunCommand(() -> {conveyorSubsystem.spin(-0.6); System.out.println("INTAKING");}, conveyorSubsystem));
+
     JoystickButton leftBumper = new JoystickButton(driveController, 5);
     JoystickButton rightBumper = new JoystickButton(driveController, 6);
     leftBumper.whenPressed(new RotateTo(fourBarSubsystem, -1*Constants.fourBarSpeed, 0));
-    rightBumper.whenPressed(new RotateTo(fourBarSubsystem, Constants.fourBarSpeed, 3600));
+    rightBumper.whenPressed(new RotateTo(fourBarSubsystem, Constants.fourBarSpeed, 4500));
     JoystickButton back = new JoystickButton(driveController, 7);
     back.whenPressed(new InstantCommand(fourBarSubsystem::resetEncoder, fourBarSubsystem));
   }

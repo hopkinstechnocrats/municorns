@@ -20,11 +20,11 @@ public final class Constants {
     public static final int XboxControllerPort = 0;
     public static final int limitSwitchPort = 0;
     public static final int fourBarMotorPort = 2;
-    public static final int conveyorMotorPort = 0;
+    public static final int conveyorMotorPort = 15;
     public static final int encoderPort = 12;
     public static final double fourBarSpeed = .4;
-    public static final double fourBarKP = 0;
-    public static final double fourBarKI = 0;
-    public static final double fourBarKD = 0;
+    public static double fourBarKP = 0.008;
+    public static double fourBarKI = 0.0001;
+    public static double fourBarKD = 0.0001;
 
 }

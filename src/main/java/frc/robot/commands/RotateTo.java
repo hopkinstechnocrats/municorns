@@ -40,10 +40,11 @@ public class RotateTo extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (speed >= 0) {
-      return subsystem.getEncoderPosition() > stopPoint;
-    } else {
-      return subsystem.getEncoderPosition() < stopPoint;
-    }
+    return false;
+    // if (speed >= 0) {
+    //   return subsystem.getEncoderPosition() > stopPoint;
+    // } else {
+    //   return subsystem.getEncoderPosition() < stopPoint;
+    // }
   }
 }
