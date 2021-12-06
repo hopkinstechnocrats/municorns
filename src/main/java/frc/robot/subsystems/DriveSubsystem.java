@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -19,7 +20,9 @@ public class DriveSubsystem extends SubsystemBase {
   WPI_TalonFX rightMaster;
   WPI_TalonFX rightFollower;
   DifferentialDrive drive;
-  public DigitalInput limitSwitch;
+  public DigitalInput limitSwitch1;
+  public DigitalInput limitSwitch2;
+  private double maxSpeed;
   
 
   public DriveSubsystem() {
@@ -31,6 +34,7 @@ public class DriveSubsystem extends SubsystemBase {
     rightMaster.setNeutralMode(NeutralMode.Brake);
     leftFollower.setNeutralMode(NeutralMode.Brake);
     rightFollower.setNeutralMode(NeutralMode.Brake);
+    maxSpeed = .45;
 
     drive = new DifferentialDrive(
       leftMaster,
@@ -39,22 +43,28 @@ public class DriveSubsystem extends SubsystemBase {
     leftFollower.follow(leftMaster);
     rightFollower.follow(rightMaster);
 
-    limitSwitch = new DigitalInput(Constants.limitSwitchPort);
+    limitSwitch1 = new DigitalInput(Constants.limitSwitchPort1);
+    limitSwitch2 = new DigitalInput(Constants.limitSwitchPort2);
     
   }
 
   public void drive(double left, double right) {
-    drive.tankDrive(left, right);
+    drive.tankDrive(-maxSpeed*left, -maxSpeed*right);
     System.out.println("left: "+ left+ ", right: "+ right);
+  }
+
+  public Command setSpeed(double maxSpeed) {
+    this.maxSpeed = maxSpeed;
+    return null;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(limitSwitch.get());
-    SmartDashboard.putBoolean("Limit Switch State", limitSwitch.get());
-
-    
+    System.out.println("Switch 1"+limitSwitch1.get());
+    SmartDashboard.putBoolean("Limit Switch1 State", limitSwitch1.get());
+    System.out.println("Switch 2"+limitSwitch2.get());
+    SmartDashboard.putBoolean("Limit Switch2 State", limitSwitch2.get());
   }
 
   @Override

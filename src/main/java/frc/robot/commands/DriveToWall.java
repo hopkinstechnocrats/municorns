@@ -24,7 +24,7 @@ public class DriveToWall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.drive(-0.4, -0.4);
+    subsystem.drive(-1.2, -1.2);
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +34,11 @@ public class DriveToWall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return subsystem.limitSwitch.get();
+    return false;
+    // if (subsystem.limitSwitch1.get() | subsystem.limitSwitch2.get()) {
+    //   return true;
+    // } else{
+    //   return false;
+    // }
   }
 }

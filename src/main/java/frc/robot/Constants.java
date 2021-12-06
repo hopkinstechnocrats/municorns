@@ -18,7 +18,9 @@ public final class Constants {
     public static final int leftMasterCANID = 5;
     public static final int leftFollowerCANID = 9;
     public static final int XboxControllerPort = 0;
-    public static final int limitSwitchPort = 0;
+    public static final int OperatorXboxControllerPort = 1;
+    public static final int limitSwitchPort1 = 0;
+    public static final int limitSwitchPort2 = 1;
     public static final int fourBarMotorPort = 2;
     public static final int conveyorMotorPort = 15;
     public static final int encoderPort = 12;
